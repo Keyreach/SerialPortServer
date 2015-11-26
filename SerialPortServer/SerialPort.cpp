@@ -23,7 +23,7 @@ unsigned long SerialPort::Write(const char* data, unsigned int size){
 	WriteFile(Port, data, size, &written, 0);
 	return written;
 }
-char* SerialPort::Read(){
+char* SerialPort::Read(long int& bytes){
 	const int READ_TIME = 1000;
 	OVERLAPPED sync = {0};
 	unsigned long wait = 0, read = 0, state = 0, write = 0;
@@ -43,10 +43,12 @@ char* SerialPort::Read(){
 				data[read] = '\0';
 				strncpy(data, buf, read);
 				CloseHandle(sync.hEvent);
+				bytes = read;
 				return data;
 			}
 	}
 	CloseHandle(sync.hEvent);
+	bytes = 0;
 	return '\0';
 }
 SerialPort::~SerialPort(){

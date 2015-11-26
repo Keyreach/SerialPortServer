@@ -7,7 +7,7 @@ private:
 public:
 	SerialPort(const char*);
 	unsigned long Write(const char*, unsigned int);
-	char* Read();
+	char* Read(long int&);
 	~SerialPort(void);
 };
 

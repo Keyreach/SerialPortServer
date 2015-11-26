@@ -52,12 +52,16 @@ int _tmain(int argc, _TCHAR* argv[])
 	}*/
 	
 	//CloseHandle(sync.hEvent);
-	char* buf;
+	char *buf, *response;
+	long int readbytes = 0;
 	SerialPort port2("\\\\.\\COM11");
 	while(1){
-		buf = port2.Read();
-		std::cout << buf << std::endl;
-		port2.Write(buf, 1);
+		buf = port2.Read(readbytes);
+		response = new char[readbytes+4];
+		sprintf(response, "%s%04d", buf, readbytes);
+		printf("%s\n%d\n", buf, readbytes);
+		port2.Write(response, strlen(response));
+		//port2.Write(buf, readbytes);
 	}
 
 	return 0;
