@@ -39,9 +39,9 @@ char* SerialPort::Read(long int& bytes){
 		if(wait == WAIT_OBJECT_0)
 			if(GetOverlappedResult(Port, &sync, &read, false)){
 				//Write(data, 1);
-				data = new char[read + 1];
-				data[read] = '\0';
-				strncpy(data, buf, read);
+				data = new char[read];
+				//data[read] = '\0';
+				memcpy(data, buf, read);
 				CloseHandle(sync.hEvent);
 				bytes = read;
 				return data;

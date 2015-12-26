@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include <cstdio>
 #include "SerialPort.h"
+#include "ModbusSlave.cpp"
 #include <iostream>
 
 
@@ -52,15 +53,30 @@ int _tmain(int argc, _TCHAR* argv[])
 	}*/
 	
 	//CloseHandle(sync.hEvent);
-	char *buf, *response;
+	char *buf, *response, modbusreq[5];
 	long int readbytes = 0;
+	int writebytes = 0;
 	SerialPort port2("\\\\.\\COM11");
+	ModbusSlave modbusslave;
 	while(1){
 		buf = port2.Read(readbytes);
+		/*
 		response = new char[readbytes+4];
 		sprintf(response, "%s%04d", buf, readbytes);
 		printf("%s\n%d\n", buf, readbytes);
-		port2.Write(response, strlen(response));
+		*/
+		printf("Received %d bytes\n",readbytes);
+		printf("%d-%d-%d-%d-%d\n",*(buf),*(buf+1),*(buf+2),*(buf+3),*(buf+4));
+		if(readbytes == 5){
+			printf("parsing pdu\n");
+			memcpy(modbusreq, buf, 5);
+			response = modbusslave.ParsePDU((unsigned char*)modbusreq, writebytes);
+		} else {
+			printf("~\n");
+			response = "INVALID_REQUEST";
+		}
+		printf("Sent %d bytes\n", writebytes);
+		port2.Write(response, writebytes);
 		//port2.Write(buf, readbytes);
 	}
 

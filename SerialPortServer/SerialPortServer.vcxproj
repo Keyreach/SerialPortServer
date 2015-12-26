@@ -84,6 +84,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="modbus-class.cpp" />
     <ClCompile Include="SerialPort.cpp" />
     <ClCompile Include="SerialPortServer.cpp" />
     <ClCompile Include="stdafx.cpp" />
